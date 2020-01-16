@@ -1,0 +1,75 @@
+== ToDos
+
+=== General
+
+* Build Tools both maven and gradle
+* Master should be tested with Github Actions
+* Development on `master` but dedicated branches for step1/step1-solution and step2/step2-solution later on
+
+
+=== Step 1
+Introduction into Spock with small self contained test of FixedLengthIntStack
+
+.what should be learned
+* catch exception (`thrown()`)
+* maybe use (`old()`)
+* data-driven
+
+== Step 2
+Spring Boot App MyToDoApp
+
+* Spring Data JPA Repository h2
+* Spring WebMVC REST Service
+* Business Logic Service
+** findAllOverdueTasks
+** findAllTasksDueToday
+
+
+.what should be learned
+* unit test vs. integration test
+* Mocking/Stubbing/Spying?
+* more data-driven
+* spring integration
+** @SpringBean
+** @StubBeans
+
+.Structure
+[plantuml, Structure]
+----
+class Task {
+    -id:TaskId
+    -title
+    -body
+    -dueDate
+
+    isOverdue()
+}
+
+class TaskId {
+    -uuid
+}
+
+class TaskController {
+    listAll()
+    add(Task)
+    delete(TaskId)
+    edit(Task)
+}
+
+class TaskService {
+    findAllOverdueTasks()
+    findAllTasksDueToday()
+    sendReminderForOverdueTasks()
+    sendTodoSummaryForTomorrow()
+}
+
+interface TaskRepository
+
+class TaskEntity {
+    -id:TaskId
+    -title
+    -body
+    -dueDate
+    -lastReminderSent
+}
+----

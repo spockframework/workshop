@@ -1,13 +1,13 @@
-== ToDos
+= ToDos
 
-=== General
+== General
 
 * Build Tools both maven and gradle
 * Master should be tested with Github Actions
 * Development on `master` but dedicated branches for step1/step1-solution and step2/step2-solution later on
 
 
-=== Step 1
+== Step 1
 Introduction into Spock with small self contained test of FixedLengthIntStack
 
 .what should be learned

@@ -6,7 +6,27 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    groovyVersion = '2.5.9'
+}
+
 dependencies {
-    testImplementation 'org.codehaus.groovy:groovy:2.5.9@pom'
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+    // optional dependencies for using Spock
+    testImplementation 'org.hamcrest:hamcrest-core:1.3' // only necessary if Hamcrest matchers are used
+    testRuntimeOnly 'net.bytebuddy:byte-buddy:1.10.7'   // allows mocking of classes (in addition to interfaces)
+    testRuntimeOnly 'org.objenesis:objenesis:3.1'       // allows mocking of classes without default constructor
+}
+
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        // Since Groovy 2.5 does not provide a bom, we have to override the versions this way
+        if (requested.group == 'org.codehaus.groovy' && requested.name.startsWith('groovy')) {
+            // Can be omitted, internally Gradle will keep the same version, but mark as modified
+            if (requested.version != groovyVersion) {
+                useVersion(groovyVersion)
+            }
+        }
+    }
 }

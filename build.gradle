@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'org.kordamp.gradle.guide' version '0.31.2'
 }
 
 repositories {
@@ -30,3 +31,46 @@ configurations.all {
         }
     }
 }
+
+config {
+    info {
+        name        = 'Spock-Workshop'
+        vendor      = 'Spock Framework Team'
+        description = 'A logical way of testing'
+
+        links {
+            website      = 'https://github.com/spockframework/workshop'
+            issueTracker = 'https://github.com/spockframework/workshop/issues'
+            scm          = 'https://github.com/spockframework/workshop.git'
+        }
+
+        people {
+            person {
+                id    = 'leonard84'
+                name  = 'Leonard Brünings'
+                roles = ['developer']
+            }
+            person {
+                id    = 'mkutz'
+                name  = 'Michael Kutz'
+                roles = ['developer']
+            }
+        }
+    }
+
+    licensing {
+        licenses {
+            license {
+                id = 'Apache-2.0'
+            }
+        }
+    }
+}
+
+asciidoctorj {
+    modules {
+        diagram.use()
+    }
+}
+
+

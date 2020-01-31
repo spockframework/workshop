@@ -1,0 +1,12 @@
+= A logical way of testing - Spock Workshop
+:author: {project-author}
+:revnumber: {project-version}
+:toclevels: 4
+:docinfo1:
+ifndef::includedir[]
+:includedir: .
+endif::[]
+
+:leveloffset: 1
+include::{includedir}/introduction.adoc[]
+include::{includedir}/step1.adoc[]

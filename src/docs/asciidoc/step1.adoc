@@ -1,0 +1,39 @@
+
+[[_step1]]
+= Step 1
+
+Step one teaches you the basics.
+
+. Checkout the `step1` branch
+ * `git checkout step1`
+. Perform a basic build
+ * `./gradlew build`
+
+[[_step1_scenario]]
+== Scenario
+Your team is tasked to provide an implementation of `FixedLengthIntStack`.
+Your co-worker already began yesterday, but got sick today, luckily he committed his changes before he left.
+
+In `src/main/java/step1/FixedLengthIntStack.java` you'll find the skeleton of the implementation.
+In `src/test/groovy/step1/FixedLengthIntStackSpec.groovy` you'll find a Specification with the description of what should be happening.
+
+Your task is to turn the specification description into code, and then fix the implementation.
+In true TDD fashion you'll write the test first, and then fix the implementation until all tests are green.
+
+.TDD Loop
+[plantuml, tdd-loop, format=svg]
+....
+state "write test" as write_test
+state "make it pass" as make_it_pass
+state "refactor" as refactor
+
+write_test -> make_it_pass
+make_it_pass --> refactor
+refactor --> write_test
+....
+
+[[_step1_links]]
+== Links
+* http://spockframework.org/spock/docs/1.3/spock_primer.html[Spock Primer]
+
+

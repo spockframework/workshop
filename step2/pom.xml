@@ -62,7 +62,7 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>1.10.3</version>
-            <scope>test</scope>
+            <!-- also needed by Hibernate, therefore no test scope -->
         </dependency>
 
         <!-- Objenesis enables mocking of classes without default constructor (together with CGLib)

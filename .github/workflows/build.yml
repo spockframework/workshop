@@ -20,8 +20,8 @@ jobs:
     - name: Build step1
       run: |
         cd step1
-        ./gradlew build
+        ./mvnw verify
     - name: Build step2
       run: |
         cd step2
-        ./gradlew build
+        ./mvnw verify

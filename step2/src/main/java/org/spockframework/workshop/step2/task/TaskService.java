@@ -32,11 +32,11 @@ class TaskService {
         return taskRepository.save(task);
     }
 
-    public Optional<Task> findTask(@NonNull final String id) {
+    Optional<Task> findTask(@NonNull final String id) {
         return taskRepository.findById(id);
     }
 
-    public Optional<Task> updateTask(@NonNull final String id, @NonNull Task update) {
+    Optional<Task> updateTask(@NonNull final String id, @NonNull Task update) {
         return taskRepository.findById(id).map(task -> {
             if (update.getTitle() != null) {
                 task.setTitle(update.getTitle());
@@ -54,7 +54,7 @@ class TaskService {
         });
     }
 
-    public void deleteTask(String id) {
+    void deleteTask(String id) {
         taskRepository.deleteById(id);
     }
 }

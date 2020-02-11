@@ -8,7 +8,7 @@
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Spock Testing Workshop</name>
+    <name>Spock Testing Workshop - Step 1</name>
     <url>https://github.com/mkutz/spock-testing-workshop</url>
 
     <properties>

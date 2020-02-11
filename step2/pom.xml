@@ -8,9 +8,13 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>org.spockframework.workshop</groupId>
 	<artifactId>step2</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
+    
+    <name>Spock Testing Workshop - Step 2</name>
+    <url>https://github.com/mkutz/spock-testing-workshop</url>
 
 	<properties>
 		<java.version>11</java.version>

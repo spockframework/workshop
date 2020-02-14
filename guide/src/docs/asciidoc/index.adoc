@@ -10,3 +10,4 @@ endif::[]
 :leveloffset: 1
 include::{includedir}/introduction.adoc[]
 include::{includedir}/step1.adoc[]
+include::{includedir}/step2.adoc[]

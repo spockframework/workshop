@@ -7,7 +7,7 @@ Step one teaches you the basics.
 . Checkout the `step1` branch
  * `git checkout step1`
 . Perform a basic build
- * `./gradlew build`
+ * `./mvnw build`
 
 [[_step1_scenario]]
 == Scenario

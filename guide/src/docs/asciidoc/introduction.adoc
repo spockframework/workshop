@@ -1,4 +1,17 @@
 [[_introduction]]
-= Introduction
+= Setup
 
-Lorem ipsum dolor sit amet
+. Checkout the repository from Github
++
+[source,bash]
+----
+git clone git@github.com:spockframework/workshop.git spock-workshop
+----
+
+. Go to the checkout folder and execute a basic build
++
+[source,bash]
+----
+cd spock-workshop
+./mvnw test
+----

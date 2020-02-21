@@ -6,7 +6,7 @@
     <groupId>org.spockframework.workshop</groupId>
     <artifactId>spock-workshop-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>Spock Testing Workshop - Modules</name>
     <url>https://github.com/mkutz/spock-testing-workshop</url>

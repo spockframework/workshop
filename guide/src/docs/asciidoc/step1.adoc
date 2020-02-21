@@ -34,6 +34,7 @@ In true TDD fashion you'll write the test first, and then fix the implementation
 .TDD Loop
 [plantuml, tdd-loop, format=svg]
 ....
+hide empty description
 state "write test" as write_test
 state "make it pass" as make_it_pass
 state "refactor" as refactor

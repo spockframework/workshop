@@ -4,10 +4,21 @@
 
 Step one teaches you the basics.
 
-. Checkout the `step1` branch
- * `git checkout step1`
-. Perform a basic build
- * `./mvnw build`
+. Checkout the repository from Github
++
+[source,bash]
+----
+git clone git@github.com:spockframework/workshop.git spock-workshop
+----
+
+. Go to the checkout folder and execute a basic build
++
+[source,bash]
+----
+cd spock-workshop
+./mvnw test
+----
+
 
 [[_step1_scenario]]
 == Scenario

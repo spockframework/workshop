@@ -51,6 +51,9 @@ interface TaskRepository {
     save(task:Task):Task
     findById(id:String):Optional<Task>
 }
+
+TaskController --* TaskService
+TaskService --* TaskRepository
 ....
 
 === Layers of Tests

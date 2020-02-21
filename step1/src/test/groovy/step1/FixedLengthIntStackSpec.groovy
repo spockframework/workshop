@@ -27,9 +27,8 @@ class FixedLengthIntStackSpec extends Specification {
 
     def "pushing an item and then popping it returns the same item"() {
         given: "an item"
-        when: "pushing it"
-        and: "popping it"
-        then: "popped item is the same as initial item"
+        and: "the item is pushed onto the stack"
+        expect: "popping it returns the same item"
     }
 
     def "popping an empty stack leads to an IndexOutOfBoundsException"() {

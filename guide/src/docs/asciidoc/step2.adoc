@@ -10,7 +10,7 @@ The code for this step can be found in the `step2` folder.
 [[_step2_scenario]]
 == Scenario
 You have been given a ToDo microservice to maintain.
-The team of consultants that developed it decided to skip the tests since the deadline was very ambitious
+The team of consultants that developed it decided to skip the tests since the deadline was very ambitious,
 and they didn't have to maintain it afterwards.
 
 .Classes

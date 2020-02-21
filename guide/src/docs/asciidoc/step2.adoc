@@ -91,7 +91,7 @@ In an object-oriented language a unit can range from a single method to an entir
 ____
 
 ==== Objectives
-Write unit tests for the `TaskController` and `TaskService`, isolate them via the use of `Mock`/`Stub` [<<_step2_links,3>>] where appropriate.
+* [ ] Write unit tests for the `TaskController` and `TaskService`, isolate them via the use of `Mock`/`Stub` [<<_step2_links,3>>] where appropriate.
 
 === Integration Tests
 
@@ -108,9 +108,9 @@ Spock provides a `spock-spring` module for Spring integration, don't forget to a
 
 
 ==== Objectives
-* Write a `@DataJpaTest` for the `TaskRepository` that tests all the custom queries.
-* Write a `@WebMvcTest` for `TaskController` and use `@SpringBean` [<<_step2_links,4>>] to replace the `TaskService` with a Mock.
-* Write a `@SpringBootTest` with `@AutoConfigureRestDocs` [<<_step2_links,4>>] to produce a validated documentation for the rest service.
+* [ ] Write a `@DataJpaTest` for the `TaskRepository` that tests all the custom queries.
+* [ ] Write a `@WebMvcTest` for `TaskController` and use `@SpringBean` [<<_step2_links,4>>] to replace the `TaskService` with a Mock.
+* [ ] Write a `@SpringBootTest` with `@AutoConfigureRestDocs` [<<_step2_links,4>>] to produce a validated documentation for the rest service.
   It is ok, to only write the tests and forgo any more textual description for this workshop.
 
 [[_step2_links]]

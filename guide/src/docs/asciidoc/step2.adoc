@@ -91,7 +91,7 @@ In an object-oriented language a unit can range from a single method to an entir
 ____
 
 ==== Objectives
-Write unit tests for the `TaskController` and `TaskService`, isolate them via the use of `Mock`/`Stub` where appropriate.
+Write unit tests for the `TaskController` and `TaskService`, isolate them via the use of `Mock`/`Stub` [<<_step2_links,3>>] where appropriate.
 
 === Integration Tests
 
@@ -109,7 +109,7 @@ Spock provides a `spock-spring` module for Spring integration, don't forget to a
 
 ==== Objectives
 * Write a `@DataJpaTest` for the `TaskRepository` that tests all the custom queries.
-* Write a `@WebMvcTest` for `TaskController` and use `@SpringBean` [<<_step2_links,3>>] to replace the `TaskService` with a Mock.
+* Write a `@WebMvcTest` for `TaskController` and use `@SpringBean` [<<_step2_links,4>>] to replace the `TaskService` with a Mock.
 * Write a `@SpringBootTest` with `@AutoConfigureRestDocs` [<<_step2_links,4>>] to produce a validated documentation for the rest service.
   It is ok, to only write the tests and forgo any more textual description for this workshop.
 
@@ -117,5 +117,6 @@ Spock provides a `spock-spring` module for Spring integration, don't forget to a
 == Links
 1. https://martinfowler.com/articles/practical-test-pyramid.html[The Practical Test Pyramid]
 2. https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-tests[Spring Boot Test Slices (Auto-configured Tests)]
-3. http://spockframework.org/spock/docs/1.3/all_in_one.html#_using_code_springbean_code[spock-spring: @SpringBean]
-4. https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-rest-assured[Auto-configured Spring REST Docs Tests with REST Assured]
+3. http://spockframework.org/spock/docs/1.3/data_driven_testing.html[Interaction Based Testing]
+4. http://spockframework.org/spock/docs/1.3/all_in_one.html#_using_code_springbean_code[spock-spring: @SpringBean]
+5. https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-rest-docs-rest-assured[Auto-configured Spring REST Docs Tests with REST Assured]

@@ -2,12 +2,10 @@
 [[_step2]]
 = Step 2
 
-Step two teaches you the usage in a spring project
+In step 2 we'll teach you some of the more advanced features of Spock.
+Including interaction based testing (mocking and stubbing) and the integration with Spring.
 
-. Checkout the `step2` branch
- * `git checkout step2`
-. Perform a basic build
- * `./mvnw build`
+The code for this step can be found in the `step2` folder.
 
 [[_step2_scenario]]
 == Scenario

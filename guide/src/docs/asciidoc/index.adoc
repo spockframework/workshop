@@ -3,6 +3,7 @@
 :revnumber: {project-version}
 :toclevels: 4
 :docinfo1:
+:xrefstyle: short
 ifndef::includedir[]
 :includedir: .
 endif::[]

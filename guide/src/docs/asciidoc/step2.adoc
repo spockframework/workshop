@@ -101,7 +101,7 @@ Examples are:
 
 [[at-regex-diagram]]
 .Regex diagram for `@`-Date Pattern
-[link=https://www.debuggex.com/r/RbYT3PoTgpd8SlGe]
+[link=https://www.debuggex.com/r/aohZC3huXxCqS9VD]
 image::At-Regex.png[]
 
 There may only be zero or one `@`-Date pattern in a task.
@@ -169,7 +169,7 @@ Spock provides a `spock-spring` module for Spring integration, don't forget to a
 [[_step2_links]]
 [bibliography]
 == Links
-- [[[debuggex-at-pattern,1]]] At-Pattern Regex visualization by https://www.debuggex.com/r/RbYT3PoTgpd8SlGe[Debuggex]
+- [[[debuggex-at-pattern,1]]] At-Pattern Regex visualization by https://www.debuggex.com/r/aohZC3huXxCqS9VD[Debuggex]
 - [[[test-pyramid,2]]] https://martinfowler.com/articles/practical-test-pyramid.html[The Practical Test Pyramid]
 - [[[sb-test-slices,3]]] https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-tests[Spring Boot Test Slices (Auto-configured Tests)]
 - [[[spock-interact,4]]] http://spockframework.org/spock/docs/1.3/data_driven_testing.html[Interaction Based Testing]

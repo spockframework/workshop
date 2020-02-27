@@ -19,11 +19,11 @@ class TaskService {
 
     private static final Pattern DOUBLE_NEWLINE = Pattern.compile("\r?\n\r?\n");
 
-    private static final Pattern DUE_DATE_PATTERN = Pattern.compile("(?:^|\\s)@(?:"
+    private static final Pattern DUE_DATE_PATTERN = Pattern.compile("(?<=^|\\s)@(?:"
                     + "(?<keyword>today|tomorrow)|"
                     + "next(?<next>monday|tuesday|wednesday|thursday|friday|saturday|sunday|week|month)|"
                     + "(?<date>\\d{4}-\\d{2}-\\d{2})"
-                    + ")(?:$|\\s)",
+                    + ")(?=$|\\s)",
             Pattern.CASE_INSENSITIVE);
 
     private final TaskRepository taskRepository;

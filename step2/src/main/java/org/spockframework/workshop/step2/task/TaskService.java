@@ -15,7 +15,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
-class TaskService {
+public class TaskService {
 
     private static final Pattern DOUBLE_NEWLINE = Pattern.compile("\r?\n\r?\n");
 
@@ -31,7 +31,7 @@ class TaskService {
     private final Clock clock;
 
     @Autowired
-    TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
         this.clock = Clock.systemDefaultZone();
     }
@@ -41,27 +41,27 @@ class TaskService {
         this.clock = clock;
     }
 
-    List<Task> findTasksToDo() {
+    public List<Task> findTasksToDo() {
         return taskRepository.findAllByDoneIsFalse();
     }
 
-    List<Task> findTasksOverdue() {
+    public List<Task> findTasksOverdue() {
         return taskRepository.findAllByDoneIsFalseAndDueDateBefore(LocalDate.now(clock));
     }
 
-    List<Task> findTasksDueToday() {
+    public List<Task> findTasksDueToday() {
         return taskRepository.findAllByDoneIsFalseAndDueDate(LocalDate.now(clock));
     }
 
-    Task saveTask(Task task) {
+    public Task saveTask(Task task) {
         return taskRepository.save(task);
     }
 
-    Optional<Task> findTask(@NonNull String id) {
+    public Optional<Task> findTask(@NonNull String id) {
         return taskRepository.findById(id);
     }
 
-    Optional<Task> updateTask(@NonNull String id, @NonNull Task update) {
+    public Optional<Task> updateTask(@NonNull String id, @NonNull Task update) {
         return taskRepository.findById(id).map(task -> {
             if (update.getTitle() != null) {
                 task.setTitle(update.getTitle());
@@ -79,11 +79,11 @@ class TaskService {
         });
     }
 
-    void deleteTask(@NonNull String id) {
+    public void deleteTask(@NonNull String id) {
         taskRepository.deleteById(id);
     }
 
-    Task createTaskFromPlainText(@NonNull String input) {
+    public Task createTaskFromPlainText(@NonNull String input) {
         Task task = parseTask(input);
         return taskRepository.save(task);
     }

@@ -23,34 +23,34 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
     @GetMapping(path = "/{id}")
-    ResponseEntity<Task> getTask(@PathVariable @NonNull String id) {
+    public ResponseEntity<Task> getTask(@PathVariable @NonNull String id) {
         return taskService.findTask(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    List<Task> getTasksToDo() {
+    public List<Task> getTasksToDo() {
         return taskService.findTasksToDo();
     }
 
     @GetMapping(path = "/overdue")
-    List<Task> getTasksOverdue() {
+    public List<Task> getTasksOverdue() {
         return taskService.findTasksOverdue();
     }
 
     @GetMapping(path = "/today")
-    List<Task> getTasksDueToday() {
+    public List<Task> getTasksDueToday() {
         return taskService.findTasksDueToday();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Task> postTask(@RequestBody Task task, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Task> postTask(@RequestBody Task task, UriComponentsBuilder uriComponentsBuilder) {
         Task createdTask = taskService.saveTask(task);
         return ResponseEntity
                 .created(uriComponentsBuilder.path("tasks/{id}").buildAndExpand(createdTask.getId()).toUri())
@@ -58,7 +58,7 @@ public class TaskController {
     }
 
     @PostMapping(consumes = TEXT_PLAIN_VALUE)
-    ResponseEntity<Task> postPlainTask(@RequestBody String task, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Task> postPlainTask(@RequestBody String task, UriComponentsBuilder uriComponentsBuilder) {
         Task createdTask = taskService.createTaskFromPlainText(task);
         return ResponseEntity
                 .created(uriComponentsBuilder.path("tasks/{id}").buildAndExpand(createdTask.getId()).toUri())
@@ -66,14 +66,14 @@ public class TaskController {
     }
 
     @PatchMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<Task> patchTask(@PathVariable @NonNull String id, @RequestBody Task update) {
+    public ResponseEntity<Task> patchTask(@PathVariable @NonNull String id, @RequestBody Task update) {
         return taskService.updateTask(id, update)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(path = "/{id}")
-    ResponseEntity<Void> deleteTask(@PathVariable @NonNull String id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable @NonNull String id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,0 +1,67 @@
+= Spock – A Logical Way of Testing – Cheatsheet
+
+== Specifications
+
+[source,groovy]
+----
+class Spec extends Specification {
+  def setupSpec() {}   // before the 1st feature
+  def setup() {}       // before each feature
+  def "feature"() {
+    // blocks go here
+  }
+  def cleanup() {}     // after each feature
+  def cleanupSpec() {} // after the last feature
+}
+----
+
+== Blocks
+
+// TODO
+
+== Mocking
+
+[source,groovy]
+----
+Subscriber subscriber = Mock()
+<cardinality> * <target>.<method>(<argument>)
+|               |        |        |
+|               |        |        "hello"           // exactly this
+|               |        |        !"hello"          // not this
+|               |        |        _                 // anything
+|               |        |        *_                // any argument list
+|               |        |        !null             // not null
+|               |        |        _ as String       // any argument list
+|               |        |        endsWith("lo")    // anything matching a Hamcrest matcher
+|               |        |        { it.size() > 3
+|               |        |          it.size() < 6 } // anything passing each line as assert
+|               |        |
+|               |        receive // specific method
+|               |        /r.*e/  // any matching method
+|               |        _       // any method
+|               |
+|               subscriber // specific mock
+|               _          // any mock
+|
+1      // once
+0      // never
+(1..3) // 1-3 times
+(1.._) // at least once
+(_..3) // up to 3 times
+_      // any times
+----
+
+== Stubbing
+
+[source,groovy]
+----
+Subscriber subscriber = Stub()
+              <target>.<method>(<argument>) >> <response>
+                                               |
+                                        "hello" // exactly this
+ { args -> args[0].size() > 3 ? "ok" : "fail" } // compute from all args array
+   { String m -> m.size() > 3 ? "ok" : "fail" } // same, but typed arguments
+            { throw new IOExcpetion("Mocked") } // throw an exception
+                                              _ // default response
+----
+

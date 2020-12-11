@@ -1,0 +1,65 @@
+= Advanced Topics
+
+== Advanced 1 - Writing extensions
+
+Reference http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
+
+=== Create an Annotation Driven Extension
+
+*Task:* Create an extension that works on both the
+
+==== Step 1
+Create an annotation `@LogThread` with the accompanying `LogThreadExtension` class.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import java.lang.annotation.*;
+import org.spockframework.runtime.extension.*;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@ExtensionAnnotation(LogThreadExtension.class)
+public @interface LogThread {
+
+}
+
+class LogThreadExtension extends AbstractAnnotationDrivenExtension<LogThread> {
+
+}
+----
+====
+
+==== Step 2
+Implement the method `visitFeatureAnnotation` and log the current thread name using `System.out.println` and `String.format("Feature '%s' is executed by Thread: '%s'",...)`.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import org.spockframework.runtime.extension.*;
+
+class LogThreadExtension extends AbstractAnnotationDrivenExtension<LogThread> {
+
+  @Override
+  void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
+      System.out.println(String.format("Feature '%s' is executed by Thread: '%s'", feature.getName(), Thread.currentThread().getName()));
+  }
+
+}
+----
+====
+
+Apply the `@LogThread` extension to the tests `a`, `b`, `c` in `ExampleTest` and observe the execution results.
+
+==== Step 3
+As you have noticed the method `visitFeatureAnnotation` is called before the actual execution of the features and even the specification.
+To do something when the actual feature is executed you have to register an http://spockframework.org/spock/docs/2.0-M4/extensions.html#_interceptors[interceptor] at the appropriate location.
+
+.Spock Interceptors
+image:http://spockframework.org/spock/docs/2.0-M4/images/spock_interceptors.png[]
+
+As you can see Spock offers a lot of hooks to hook into.

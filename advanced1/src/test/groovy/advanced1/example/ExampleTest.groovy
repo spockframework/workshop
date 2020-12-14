@@ -1,6 +1,8 @@
 package advanced1.example
 
-import spock.lang.*
+
+import spock.lang.Rollup
+import spock.lang.Specification
 
 class ExampleTest extends Specification {
 
@@ -21,12 +23,12 @@ class ExampleTest extends Specification {
     }
 
     def "a"() {
-        println "Executing A"
+        println "Executing a"
         expect: true
     }
 
     def "b"(int index) {
-        println "Executing B $index"
+        println "Executing b $index"
         expect: true
 
         where:
@@ -35,7 +37,7 @@ class ExampleTest extends Specification {
 
     @Rollup
     def "c"(int index) {
-        println "Executing C $index"
+        println "Executing c $index"
         expect: true
 
         where:

@@ -2,7 +2,17 @@
 
 == Advanced 1 - Writing extensions
 
-Reference http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
+This workshop teaches you about Spocks extension API.
+You should have a basic understanding about Spock (check the basic workshop).
+
+Learning Goals:
+
+* You can create annotation driven extensions
+* You can create global extensions
+* You know about interceptors and interception points
+* You know how how to configure your extension via config objects
+
+Reference documentation http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
 
 === Create an Annotation Driven Extension
 
@@ -26,7 +36,7 @@ public @interface LogThread {
 
 }
 
-class LogThreadExtension extends AbstractAnnotationDrivenExtension<LogThread> {
+public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread> {
 
 }
 ----
@@ -40,12 +50,13 @@ Implement the method `visitFeatureAnnotation` and log the current thread name us
 ====
 [source,java]
 ----
+import org.spockframework.runtime.model.*;
 import org.spockframework.runtime.extension.*;
 
-class LogThreadExtension extends AbstractAnnotationDrivenExtension<LogThread> {
+public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread> {
 
   @Override
-  void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
+  public void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
       System.out.println(String.format("Feature '%s' is executed by Thread: '%s'", feature.getName(), Thread.currentThread().getName()));
   }
 
@@ -62,4 +73,205 @@ To do something when the actual feature is executed you have to register an http
 .Spock Interceptors
 image:http://spockframework.org/spock/docs/2.0-M4/images/spock_interceptors.png[]
 
-As you can see Spock offers a lot of hooks to hook into.
+As you can see Spock offers a lot of hooks to hook into. Try to figure out which interception point you want to hook into.
+Remember, we want to log the current thread for every feature that is executed.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import org.spockframework.runtime.model.*;
+import org.spockframework.runtime.extension.*;
+
+public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread> {
+
+    @Override
+    public void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
+        feature.addInterceptor(new LogThreadInterceptor());
+    }
+
+}
+
+class LogThreadInterceptor implements IMethodInterceptor {
+
+  @Override
+  public void intercept(IMethodInvocation invocation) throws Throwable {
+      System.out.println(String.format("Feature '%s' is executed by Thread: '%s'", invocation.getFeature().getName(), Thread.currentThread().getName()));
+  }
+
+}
+----
+====
+
+Run the `ExampleTest` again and observe the results.
+
+.Output
+[%collapsible]
+====
+----
+Executing setupSpec
+Feature 'a' is executed by Thread: 'main'
+Feature 'b' is executed by Thread: 'main'
+Feature 'c' is executed by Thread: 'main'
+Executing cleanupSpec
+----
+====
+
+==== Step 4
+As you may have noticed it logs that it is executing the features,
+but nothing is logged from the setup/cleanup as well as the features themselves.
+Also, the data-driven features have no nodes.
+
+To fix this you need to call `invocation.proceed()` in your interceptor, otherwise it won't execute the intercepted code at all.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import org.spockframework.runtime.model.*;
+import org.spockframework.runtime.extension.*;
+
+class LogThreadInterceptor implements IMethodInterceptor {
+
+  @Override
+  public void intercept(IMethodInvocation invocation) throws Throwable {
+      System.out.println(String.format("Feature '%s' is executed by Thread: '%s'", invocation.getFeature().getName(), Thread.currentThread().getName()));
+      invocation.proceed();
+  }
+
+}
+----
+====
+
+.Output
+[%collapsible]
+====
+----
+Executing setupSpec
+Feature 'a' is executed by Thread: 'main'
+Executing setup
+Executing a
+Executing cleanup
+Feature 'b' is executed by Thread: 'main'
+Executing setup
+Executing b 1
+Executing cleanup
+Executing setup
+Executing b 2
+Executing cleanup
+Feature 'c' is executed by Thread: 'main'
+Executing setup
+Executing c 1
+Executing cleanup
+Executing setup
+Executing c 2
+Executing cleanup
+Executing cleanupSpec
+----
+====
+
+As you can see it works as expected for feature `a`,
+but for feature `b` and `c` it logs only once although the data-driven feature has two iterations.
+As you might have guessed, we need to hook into another interception point to get those iterations as well.
+
+
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import org.spockframework.runtime.model.*;
+import org.spockframework.runtime.extension.*;
+
+public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread> {
+
+    @Override
+    public void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
+        feature.addIterationInterceptor(new LogThreadInterceptor());
+    }
+
+}
+----
+====
+
+.Output
+[%collapsible]
+====
+----
+Executing setupSpec
+Feature 'a' is executed by Thread: 'main'
+Executing setup
+Executing a
+Executing cleanup
+Feature 'b' is executed by Thread: 'main'
+Executing setup
+Executing b 1
+Executing cleanup
+Feature 'b' is executed by Thread: 'main'
+Executing setup
+Executing b 2
+Executing cleanup
+Feature 'c' is executed by Thread: 'main'
+Executing setup
+Executing c 1
+Executing cleanup
+Feature 'c' is executed by Thread: 'main'
+Executing setup
+Executing c 2
+Executing cleanup
+Executing cleanupSpec
+----
+====
+
+==== Step 5
+
+Applying the extension on every feature is a bit cumbersome, so add the capability that the extension can be applied to the specification as well.
+When being applied on the specification it should behave as if it was applied to every feature individually.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import java.lang.annotation.*;
+import org.spockframework.runtime.extension.*;
+import org.spockframework.runtime.model.*;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD,ElementType.TYPE})
+@ExtensionAnnotation(LogThreadExtension.class)
+public @interface LogThread {
+
+}
+
+
+public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread> {
+
+    @Override
+    public void visitSpecAnnotation(LogThread annotation, SpecInfo spec) {
+        spec.getFeatures().forEach(feature-> feature.addIterationInterceptor(new LogThreadInterceptor()));
+    }
+
+    @Override
+    public void visitFeatureAnnotation(LogThread annotation, FeatureInfo feature){
+        feature.addIterationInterceptor(new LogThreadInterceptor());
+    }
+}
+----
+====
+
+Remove the annotations from the individual features and apply it to the specification and see that it works as intended.
+
+==== More to think about
+We have not looked at dealing with inheritance, when you are only doing a feature annotation then there is not really anything to do.
+However, when you are supporting specification level extensions, then you will have to think about how you want to handle inheritance.
+
+* `@Inherited` would copy your extension down to inheritors.
+* You can access all the features via `SpecInfo.getBottomSpec()` and then you can call `SpecInfo.getAllFeatures()`,
+  which will recursively collect the features and parent features.
+* You can navigate the specification hierarchy via `SpecInfo.getSpecsTopToBottom()` or `SpecInfo.getSpecsBottomToTop()`.
+
+=== Global Extension

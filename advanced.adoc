@@ -10,7 +10,7 @@ Learning Goals:
 * You can create annotation driven extensions
 * You can create global extensions
 * You know about interceptors and interception points
-* You know how how to configure your extension via config objects
+* You know how to configure your extension via config objects
 
 Reference documentation http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
 
@@ -275,3 +275,142 @@ However, when you are supporting specification level extensions, then you will h
 * You can navigate the specification hierarchy via `SpecInfo.getSpecsTopToBottom()` or `SpecInfo.getSpecsBottomToTop()`.
 
 === Global Extension
+Your next task is to take what you've learned and apply it to create a global extension that:
+
+* logs the start and end of the executions of specs and iterations
+** the log should include the spec name (+ iteration name), the time and whether it started or stopped
+** the logs should not be printed to standard out, but collected in a central `ConcurrentLinkedQueue`
+** when the run is finished the collected logs should be written to a timestamped file in `target/`
+
+==== Step 1
+
+Create a global extension class `ExecutionLogExtension` that implements `IGlobalExtension`.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import org.spockframework.runtime.extension.*;
+import org.spockframework.runtime.model.*;
+
+public class ExecutionLogExtension implements IGlobalExtension {
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void visitSpec(SpecInfo spec) {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+}
+----
+====
+
+==== Step 2
+
+Unlike annotation driven extensions, which are discovered by spock through the presence of the annotation,
+global extensions need to registered by creating a special file.
+
+Simply put the fully qualified classname of the `ExecutionLogExtension` in
+`META-INF/services/org.spockframework.runtime.extension.IGlobalExtension`
+
+==== Step 3
+
+Create the `ExecutionLogInterceptor`, you can use `AbstractMethodInterceptor` so that the interceptor can easily be used in multiple interception points.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import java.time.Instant;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.spockframework.runtime.extension.*;
+
+public class ExecutionLogInterceptor extends AbstractMethodInterceptor {
+
+    private final ConcurrentLinkedQueue<String> log;
+
+    public ExecutionLogInterceptor(ConcurrentLinkedQueue<String> log) {
+        this.log = log;
+    }
+
+    private void invoke(IMethodInvocation invocation, String message) throws Throwable {
+        log.add(String.format("%s Start %s", Instant.now(), message));
+        invocation.proceed();
+        log.add(String.format("%s End %s", Instant.now(), message));
+    }
+
+    @Override
+    public void interceptSpecExecution(IMethodInvocation invocation) throws Throwable {
+        invoke(invocation, invocation.getSpec().getName());
+    }
+
+    @Override
+    public void interceptIterationExecution(IMethodInvocation invocation) throws Throwable {
+        invoke(invocation, String.format("%s > %s", invocation.getSpec().getName(), invocation.getIteration().getName()));
+    }
+}
+----
+====
+
+==== Step 4
+
+Finish the `ExecutionLogExtension` by registering `ExecutionLogInterceptor` at the appropriate locations and implement the save function.
+Only create the file if there are any logged events.
+
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.spockframework.runtime.extension.IGlobalExtension;
+import org.spockframework.runtime.model.SpecInfo;
+
+public class ExecutionLogExtension implements IGlobalExtension {
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss.nnn");
+
+    private final ConcurrentLinkedQueue<String> log = new ConcurrentLinkedQueue<>();
+
+    private final ExecutionLogInterceptor interceptor = new ExecutionLogInterceptor(log);
+
+    @Override
+    public void start() {
+        // do nothing
+    }
+
+    @Override
+    public void visitSpec(SpecInfo spec) {
+        spec.addInterceptor(interceptor);
+        spec.getAllFeatures().forEach(featureInfo -> featureInfo.addIterationInterceptor(interceptor));
+    }
+
+    @Override
+    public void stop() {
+        if (!log.isEmpty()) {
+            File target = new File("target", "execution-" + DATE_TIME_FORMATTER.format(LocalDateTime.now()) + ".log");
+            try (PrintWriter pw = new PrintWriter(new FileWriter(target))) {
+                log.forEach(pw::println);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+----
+====

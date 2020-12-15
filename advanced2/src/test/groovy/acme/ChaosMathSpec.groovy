@@ -2,7 +2,9 @@ package acme
 
 
 import spock.lang.Specification
+import spock.util.environment.RestoreSystemProperties
 
+@RestoreSystemProperties
 class ChaosMathSpec extends Specification {
     ChaosMath math = new ChaosMath()
 

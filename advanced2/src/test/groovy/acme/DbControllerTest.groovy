@@ -2,6 +2,8 @@ package acme
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
+import org.spockframework.runtime.model.parallel.ResourceAccessMode
+import org.spockframework.runtime.model.parallel.Resources
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,8 +11,11 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 
+import spock.lang.ResourceLock
+import spock.lang.ResourceLock
 import spock.lang.Specification
 
+@ResourceLock(SharedResources.DATABASE)
 @AutoConfigureMockMvc
 @SpringBootTest
 class DbControllerTest extends Specification {
@@ -55,6 +60,7 @@ class DbControllerTest extends Specification {
         db.get("foo") == null
     }
 
+    @ResourceLock(value= Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ)
     def "can list keys"() {
         given:
         db.add("foo", "bar")

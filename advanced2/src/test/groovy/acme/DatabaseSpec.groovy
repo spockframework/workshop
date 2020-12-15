@@ -1,10 +1,12 @@
 package acme
 
-
+import spock.lang.ResourceLock
 import spock.lang.Specification
 import spock.lang.Subject
 
 
+
+@ResourceLock(SharedResources.DATABASE)
 class DatabaseSpec extends Specification {
     @Subject
     Database db = Database.INSTANCE

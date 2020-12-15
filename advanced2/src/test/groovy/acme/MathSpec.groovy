@@ -1,14 +1,18 @@
 package acme
 
+import org.spockframework.runtime.model.parallel.ResourceAccessMode
+import org.spockframework.runtime.model.parallel.Resources
 
+import spock.lang.ResourceLock
 import spock.lang.Specification
 import spock.lang.Subject
 
 
+@ResourceLock(value=Resources.SYSTEM_PROPERTIES, mode = ResourceAccessMode.READ)
 class MathSpec extends Specification {
 
     @Subject
-    ChaosMath math = new ChaosMath();
+    ChaosMath math = new ChaosMath()
 
     def "can compute max"(int a, int b, int result) {
         expect:

@@ -1,5 +1,6 @@
 package acme
 
+
 import static org.mockserver.model.HttpRequest.request
 import static org.mockserver.model.HttpResponse.response
 
@@ -9,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 
+import spock.lang.ResourceLock
 import spock.lang.Specification
 
+@ResourceLock(SharedResources.MOCKSERVER)
 @SpringBootTest
 class RemoteServiceTest extends Specification {
 

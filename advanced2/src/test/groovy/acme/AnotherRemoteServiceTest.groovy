@@ -6,15 +6,15 @@ import static org.mockserver.model.HttpResponse.response
 import java.time.Instant
 
 import org.mockserver.client.MockServerClient
-import org.spockframework.runtime.model.parallel.ExecutionMode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 
-import spock.lang.Execution
+import spock.lang.ResourceLock
 import spock.lang.Specification
 
+@ResourceLock(SharedResources.MOCKSERVER)
 @SpringBootTest
 class AnotherRemoteServiceTest extends Specification {
 

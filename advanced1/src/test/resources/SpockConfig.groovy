@@ -1,0 +1,3 @@
+executionLog {
+    enabled false
+}

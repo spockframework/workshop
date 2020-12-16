@@ -473,6 +473,8 @@ public class ExecutionLogConfig {
     boolean enabled = true;
 }
 ----
+
+Add `private ExecutionLogConfig config;` as field to `ExecutionLogExtension` and replace the `Boolean.getBoolean(...)` with `config.enabled`
 ====
 
 === Step 7

@@ -14,12 +14,24 @@ Learning Goals:
 
 Reference documentation http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
 
+NOTE: You can use either Java or Groovy to implement the extensions.
+      Spock itself uses Java as this provides compatibility with the different Groovy versions.
+      If you choose to use Groovy, then you should add `@CompileStatic` to your classes.
+      The solutions are in Java.
+
+Put your code into `src/main/java` or `src/main/groovy`.
+
+In the following guide you will see collapsed sections named `Spoiler` and `Output`.
+The `Output` sections contain the reference output.
+If you need help don't be afraid to use the `Spoiler` it will contain a solution for the current problem,
+alternatively you could look at existing Spock code, however this will include more information than necessary.
+
 === Create an Annotation Driven Extension
 
-*Task:* Create an extension that works on both the
+*Task:* Create an extension that can be applied on both the feature and specification level, this extension should log the current thread name to stdout.
 
 ==== Step 1
-Create an annotation `@LogThread` with the accompanying `LogThreadExtension` class.
+Create an annotation `@LogThread` with the accompanying `LogThreadExtension` class, for the beginning let it only be applied to methods.
 
 .Spoiler
 [%collapsible]

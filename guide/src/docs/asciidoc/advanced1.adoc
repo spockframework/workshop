@@ -1,8 +1,7 @@
-= Advanced Topics
+[[_advanced1]]
+= Advanced 1 - Writing extensions
 
-== Advanced 1 - Writing extensions
-
-This workshop teaches you about Spocks extension API.
+This workshop module teaches you about Spocks extension API.
 You should have a basic understanding about Spock (check the basic workshop).
 
 Learning Goals:
@@ -19,6 +18,7 @@ NOTE: You can use either Java or Groovy to implement the extensions.
       If you choose to use Groovy, then you should add `@CompileStatic` to your classes.
       The solutions are in Java.
 
+This part uses the `advanced1` module.
 Put your code into `src/main/java` or `src/main/groovy`.
 
 In the following guide you will see collapsed sections named `Spoiler` and `Output`.
@@ -26,11 +26,11 @@ The `Output` sections contain the reference output.
 If you need help don't be afraid to use the `Spoiler` it will contain a solution for the current problem,
 alternatively you could look at existing Spock code, however this will include more information than necessary.
 
-=== Create an Annotation Driven Extension
+== Create an Annotation Driven Extension
 
 *Task:* Create an extension that can be applied on both the feature and specification level, this extension should log the current thread name to stdout.
 
-==== Step 1
+=== Step 1
 Create an annotation `@LogThread` with the accompanying `LogThreadExtension` class, for the beginning let it only be applied to methods.
 
 .Spoiler
@@ -54,7 +54,7 @@ public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread>
 ----
 ====
 
-==== Step 2
+=== Step 2
 Implement the method `visitFeatureAnnotation` and log the current thread name using `System.out.println` and `String.format("Feature '%s' is executed by Thread: '%s'",...)`.
 
 .Spoiler
@@ -78,7 +78,7 @@ public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread>
 
 Apply the `@LogThread` extension to the tests `a`, `b`, `c` in `ExampleTest` and observe the execution results.
 
-==== Step 3
+=== Step 3
 As you have noticed the method `visitFeatureAnnotation` is called before the actual execution of the features and even the specification.
 To do something when the actual feature is executed you have to register an http://spockframework.org/spock/docs/2.0-M4/extensions.html#_interceptors[interceptor] at the appropriate location.
 
@@ -130,7 +130,7 @@ Executing cleanupSpec
 ----
 ====
 
-==== Step 4
+=== Step 4
 As you may have noticed it logs that it is executing the features,
 but nothing is logged from the setup/cleanup as well as the features themselves.
 Also, the data-driven features have no nodes.
@@ -238,7 +238,7 @@ Executing cleanupSpec
 ----
 ====
 
-==== Step 5
+=== Step 5
 
 Applying the extension on every feature is a bit cumbersome, so add the capability that the extension can be applied to the specification as well.
 When being applied on the specification it should behave as if it was applied to every feature individually.
@@ -277,7 +277,7 @@ public class LogThreadExtension implements IAnnotationDrivenExtension<LogThread>
 
 Remove the annotations from the individual features and apply it to the specification and see that it works as intended.
 
-==== More to think about
+=== More to think about
 We have not looked at dealing with inheritance, when you are only doing a feature annotation then there is not really anything to do.
 However, when you are supporting specification level extensions, then you will have to think about how you want to handle inheritance.
 
@@ -286,7 +286,7 @@ However, when you are supporting specification level extensions, then you will h
   which will recursively collect the features and parent features.
 * You can navigate the specification hierarchy via `SpecInfo.getSpecsTopToBottom()` or `SpecInfo.getSpecsBottomToTop()`.
 
-=== Global Extension
+== Global Extension
 Your next task is to take what you've learned and apply it to create a global extension that:
 
 * logs the start and end of the executions of specs and iterations
@@ -294,7 +294,11 @@ Your next task is to take what you've learned and apply it to create a global ex
 ** the logs should not be printed to standard out, but collected in a central `ConcurrentLinkedQueue`
 ** when the run is finished the collected logs should be written to a timestamped file in `target/`
 
-==== Step 1
+NOTE: The current Maven Surefire uses the JUnit Platform in such a way that causes multiple runs of the extensions.
+      So `start`, `stop` are called multiple times, as well as `visitSpec`.
+      https://issues.apache.org/jira/projects/SUREFIRE/issues/SUREFIRE-1864[SUREFIRE-1864] `Excessive use of discover by the JUnitPlatformProvider`.
+
+=== Step 1
 
 Create a global extension class `ExecutionLogExtension` that implements `IGlobalExtension`.
 
@@ -325,7 +329,7 @@ public class ExecutionLogExtension implements IGlobalExtension {
 ----
 ====
 
-==== Step 2
+=== Step 2
 
 Unlike annotation driven extensions, which are discovered by spock through the presence of the annotation,
 global extensions need to registered by creating a special file.
@@ -333,7 +337,7 @@ global extensions need to registered by creating a special file.
 Simply put the fully qualified classname of the `ExecutionLogExtension` in
 `META-INF/services/org.spockframework.runtime.extension.IGlobalExtension`
 
-==== Step 3
+=== Step 3
 
 Create the `ExecutionLogInterceptor`, you can use `AbstractMethodInterceptor` so that the interceptor can easily be used in multiple interception points.
 
@@ -374,11 +378,12 @@ public class ExecutionLogInterceptor extends AbstractMethodInterceptor {
 ----
 ====
 
-==== Step 4
+=== Step 4
 
 Finish the `ExecutionLogExtension` by registering `ExecutionLogInterceptor` at the appropriate locations and implement the save function.
 Only create the file if there are any logged events.
 
+NOTE: `stop()` could be called more than once add a flag so that you only write once.
 
 .Spoiler
 [%collapsible]
@@ -401,6 +406,8 @@ public class ExecutionLogExtension implements IGlobalExtension {
 
     private final ExecutionLogInterceptor interceptor = new ExecutionLogInterceptor(log);
 
+    private boolean written = false;
+
     @Override
     public void start() {
         // do nothing
@@ -414,7 +421,8 @@ public class ExecutionLogExtension implements IGlobalExtension {
 
     @Override
     public void stop() {
-        if (!log.isEmpty()) {
+        if (!log.isEmpty() && !written) {
+            written = true;
             File target = new File("target", "execution-" + DATE_TIME_FORMATTER.format(LocalDateTime.now()) + ".log");
             try (PrintWriter pw = new PrintWriter(new FileWriter(target))) {
                 log.forEach(pw::println);
@@ -423,6 +431,62 @@ public class ExecutionLogExtension implements IGlobalExtension {
             }
         }
     }
+}
+----
+====
+
+=== Step 5
+Currently, this global extension will be picked up and log as soon as it is added as dependency.
+To make it more flexible we should make it configurable.
+The easiest way is to just define and listen to a system property.
+
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+@Override
+public void visitSpec(SpecInfo spec) {
+    if (Boolean.getBoolean("ExecutionLogExtension.enabled", true)) {
+        spec.addInterceptor(interceptor);
+        spec.getAllFeatures().forEach(featureInfo -> featureInfo.addIterationInterceptor(interceptor));
+    }
+}
+----
+====
+
+=== Step 6
+While a system property certainly works, a more powerful way is to use http://spockframework.org/spock/docs/2.0-M4/extensions.html#_configuration_objects[Configuration Objects].
+
+Define a simple configuration object with the field `enabled` that is available under the section `executionLog` and `true` by default.
+
+.Spoiler
+[%collapsible]
+====
+[source,java]
+----
+import spock.config.ConfigurationObject;
+
+@ConfigurationObject("executionLog")
+public class ExecutionLogConfig {
+    boolean enabled = true;
+}
+----
+====
+
+=== Step 7
+Add a `SpockConfig.groovy` to the root of `src/test/groovy` and configure the extension.
+Try setting the `enabled` field to true and to false and observe the results.
+
+
+.Spoiler
+[%collapsible]
+====
+[source,groovy]
+----
+executionLog {
+    enabled false
 }
 ----
 ====

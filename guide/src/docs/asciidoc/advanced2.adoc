@@ -1,0 +1,19 @@
+= Advanced 2 - Parallel Execution
+
+NOTE: This part assumes you've completed <<_advanced1.adoc#_advanced1, Advanced 1>>,
+      while the knowledge from that module is not strictly necessary the result is used in this module.
+      If you directly want to start with this module you can take the code from the solution branch.
+
+
+This workshop module teaches you about Spocks spocks support for parallel execution.
+You should have a basic understanding about Spock (check the basic workshop).
+
+Learning Goals:
+
+* You now about and can configure the parallel execution settings in `SpockConfig.groovy`
+
+
+NOTE: Maven Surefire 3.0.0-M5 has an issue with reporting in parallel execution https://issues.apache.org/jira/browse/SUREFIRE-1643[SUREFIRE-1643]
+      `JUnit 5 in parallel execution mode confuses Surefire reports`
+      this can lead to wrong reports where feature are reported to be in a wrong specification.
+      This issue does not

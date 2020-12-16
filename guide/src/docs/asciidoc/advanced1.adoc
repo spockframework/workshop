@@ -448,7 +448,7 @@ The easiest way is to just define and listen to a system property.
 ----
 @Override
 public void visitSpec(SpecInfo spec) {
-    if (Boolean.getBoolean("ExecutionLogExtension.enabled", true)) {
+    if (Boolean.parseBoolean(System.getProperty("ExecutionLogExtension.enabled", "true"))) {
         spec.addInterceptor(interceptor);
         spec.getAllFeatures().forEach(featureInfo -> featureInfo.addIterationInterceptor(interceptor));
     }

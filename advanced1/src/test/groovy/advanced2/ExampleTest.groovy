@@ -1,4 +1,4 @@
-package advanced1.example
+package advanced2
 
 
 import spock.lang.Rollup

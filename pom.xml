@@ -15,6 +15,7 @@
         <module>step1</module>
         <module>step2</module>
         <module>advanced1</module>
+        <module>advanced2</module>
     </modules>
 
 </project>

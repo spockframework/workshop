@@ -26,7 +26,7 @@ Run all tests (either `../mvnw verify` or via IntelliJ) and look at the generate
 
 
 NOTE: The main code and tests are contrived to demonstrate issues that can lurk in code with shared state.
-      Don't change the main implementation and features themselves, you.
+      Don't change the main implementation and features themselves, you should only use the extensions mentioned in Step 3.
 
 == Step 2
 
@@ -60,9 +60,13 @@ Look at the tools Spock gives you to deal with tests that use a shared resource.
 * http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#execution-modes[Execution modes]
 * http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_resource_locks[Resource Locks]
 * http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_isolated_execution[Isolated Execution]
-* Some http://spockframework.org/spock/docs/2.0-M4/extensions.html[Extension] also affect paralallel execution, you can find that info in the notes
+* Some http://spockframework.org/spock/docs/2.0-M4/extensions.html[Extension] also affect parallel execution, you can find that info in the notes
 
 == Step 4
+
+Most of the time tests fail, because they have shared state be it global variables, singletons, system properties, or something else.
+Your task is to identify those shared states and apply the tools you've learned about in Step 3 to fix the failing tests.
+
 There are several ways to approach this problem.
 
 === Go Specification by Specification in IntelliJ
@@ -90,7 +94,6 @@ runner {
 NOTE: Both Spock and JUnit Jupiter have an `@Execution` extension,
       make sure you use the one from Spock `import spock.lang.Execution`.
 
-Apply the tools you've learned about in Step 4 to solve the issues.
 
 == Step 5
 

@@ -26,7 +26,7 @@ public class ChaosMath {
         return isChaos() ? 1 : -1;
     }
 
-    private boolean isChaos() {
+    public static boolean isChaos() {
         return Boolean.parseBoolean(System.getProperty("chaos", "false"));
     }
 }

@@ -5,15 +5,54 @@ NOTE: This part assumes you've completed <<_advanced1.adoc#_advanced1, Advanced 
       If you directly want to start with this module you can take the code from the solution branch.
 
 
-This workshop module teaches you about Spocks spocks support for parallel execution.
+This workshop module teaches you about Spocks support for parallel execution.
 You should have a basic understanding about Spock (check the basic workshop).
 
 Learning Goals:
 
-* You now about and can configure the parallel execution settings in `SpockConfig.groovy`
+* You know about and can configure the parallel execution settings in `SpockConfig.groovy`
+* You know when to use `@Execution`, `@ResourceLock`, `@Isolated`
 
 
 NOTE: Maven Surefire 3.0.0-M5 has an issue with reporting in parallel execution https://issues.apache.org/jira/browse/SUREFIRE-1643[SUREFIRE-1643]
       `JUnit 5 in parallel execution mode confuses Surefire reports`
       this can lead to wrong reports where feature are reported to be in a wrong specification.
-      This issue does not
+      For the time being it might be better to execute the tests using IntelliJ
+
+== Step 1
+
+Add the advanced1 project as dependency to get access to the `ExecutionLogExtension`.
+Run all tests (either `../mvnw verify` or via IntelliJ) and look at the generated execution record.
+
+== Step 2
+
+Enable parallel execution by creating `src/test/resources/SpockConfig.groovy` with
+
+[source,groovy]
+----
+runner {
+    parallel {
+        enabled true
+        fixed(16)
+    }
+}
+----
+
+see also http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#parallel-thread-pool[Parallel Thread Pool].
+
+Run all tests 2x and compare the generated execution records.
+
+Notice that tests started failing when executed in parallel.
+
+You can experiment with the different thread pool options but continue with `fixed(16)`.
+
+== Step 3
+Look at the tools Spock gives you to deal with tests that use a shared resource.
+
+* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#execution-modes[Execution modes]
+* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_resource_locks[Resource Locks]
+* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_isolated_execution[Isolated Execution]
+* Some http://spockframework.org/spock/docs/2.0-M4/extensions.html[Extension] also affect paralallel execution, you can find that info in the notes
+
+== Step 4
+There are several ways to approach this problem.

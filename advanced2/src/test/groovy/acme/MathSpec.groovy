@@ -1,6 +1,6 @@
-package advanced2
+package acme
 
-import acme.ChaosMath
+
 import spock.lang.Specification
 import spock.lang.Subject
 

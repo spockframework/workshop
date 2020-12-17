@@ -478,7 +478,7 @@ Add `private ExecutionLogConfig config;` as field to `ExecutionLogExtension` and
 ====
 
 === Step 7
-Add a `SpockConfig.groovy` to the root of `src/test/groovy` and configure the extension.
+Add a `SpockConfig.groovy` to the root of `src/test/resources` and configure the extension.
 Try setting the `enabled` field to true and to false and observe the results.
 
 

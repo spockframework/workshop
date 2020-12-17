@@ -1,4 +1,4 @@
-package advanced2
+package acme
 
 
 import spock.lang.Rollup

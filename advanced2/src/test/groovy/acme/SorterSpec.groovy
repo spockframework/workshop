@@ -25,7 +25,22 @@ class SorterSpec extends Specification {
         input << scramble((1..15).collect(), 20)
     }
 
-    static List<List<Integer>> scramble(List<Integer> input, int samples) {
+    def "can sort list of strings"(List<String> input) {
+        given:
+        def reference = new ArrayList(input)
+        reference.sort()
+
+        when:
+        sorter.sortStrings(input)
+
+        then:
+        input == reference
+
+        where:
+        input << scramble((1..15).collect{it.toString()}, 20)
+    }
+
+    static <T> List<List<T>> scramble(List<T> input, int samples) {
         def output = []
         samples.times {
             output << new ArrayList<>(input).tap { it.shuffle() }

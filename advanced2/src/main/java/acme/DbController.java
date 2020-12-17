@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,7 +33,7 @@ public class DbController {
     }
 
     @PutMapping(value = "/db/{key}", consumes = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<Void> addEntry(@PathVariable String key, String value) {
+    public ResponseEntity<Void> addEntry(@PathVariable String key, @RequestBody String value) {
         database.add(key, value);
         return ResponseEntity.created(URI.create("/db/" + key)).build();
     }

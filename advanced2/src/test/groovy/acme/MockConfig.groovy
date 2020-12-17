@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 class MockConfig {
     @Bean
     ClientAndServer clientAndServer () {
-        return ClientAndServer.startClientAndServer(1)
+        return ClientAndServer.startClientAndServer(0)
     }
 
     @Bean

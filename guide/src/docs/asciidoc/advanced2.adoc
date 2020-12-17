@@ -24,6 +24,10 @@ NOTE: Maven Surefire 3.0.0-M5 has an issue with reporting in parallel execution 
 Add the advanced1 project as dependency to get access to the `ExecutionLogExtension`.
 Run all tests (either `../mvnw verify` or via IntelliJ) and look at the generated execution record.
 
+
+NOTE: The main code and tests are contrived to demonstrate issues that can lurk in code with shared state.
+      Don't change the main implementation and features themselves, you.
+
 == Step 2
 
 Enable parallel execution by creating `src/test/resources/SpockConfig.groovy` with
@@ -46,6 +50,10 @@ Notice that tests started failing when executed in parallel.
 
 You can experiment with the different thread pool options but continue with `fixed(16)`.
 
+
+NOTE: Sometimes IntelliJ does not correctly copy the resources,
+      if you don't see an effect in IntelliJ copy the `SpockConfig.groovy` to `target/test-classes` manually.
+
 == Step 3
 Look at the tools Spock gives you to deal with tests that use a shared resource.
 
@@ -56,3 +64,36 @@ Look at the tools Spock gives you to deal with tests that use a shared resource.
 
 == Step 4
 There are several ways to approach this problem.
+
+=== Go Specification by Specification in IntelliJ
+This will help you to solve problems inside a specification.
+
+=== Enable parallel execution one by one
+With this setting both the specifications and features will run sequentially by default.
+You can now selectively enable concurrent execution by annotating the specifications one by one with `@Execution(ExecutionMode.CONCURRENT)`,
+while executing all tests.
+
+[source,groovy]
+----
+import org.spockframework.runtime.model.parallel.ExecutionMode
+
+runner {
+    parallel {
+        enabled true
+        fixed(16)
+        defaultExecutionMode ExecutionMode.SAME_THREAD
+        defaultSpecificationExecutionMode ExecutionMode.SAME_THREAD
+    }
+}
+----
+
+NOTE: Both Spock and JUnit Jupiter have an `@Execution` extension,
+      make sure you use the one from Spock `import spock.lang.Execution`.
+
+Apply the tools you've learned about in Step 4 to solve the issues.
+
+== Step 5
+
+Optimize the amount of concurrency. The easiest solution would be to just disable parallel execution altogether or use `@Isolated` for every specification,
+but that defeats the purpose. Try to use read-locks as much as possible and only use write locks where you actually mutate shared state.
+Also keep the http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_lock_coarsening[lock coarsening] behavior in mind when applying locks.

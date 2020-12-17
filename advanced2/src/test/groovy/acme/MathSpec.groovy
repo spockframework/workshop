@@ -89,7 +89,7 @@ class MathSpec extends Specification {
 
     def "can compare"(int a, int b, int result) {
         expect:
-        Integer.compare(a, b) == result
+        math.compare(a, b) == result
 
         where:
         a  | b  | result

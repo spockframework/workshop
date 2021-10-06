@@ -11,7 +11,7 @@ Learning Goals:
 * You know about interceptors and interception points
 * You know how to configure your extension via config objects
 
-Reference documentation http://spockframework.org/spock/docs/2.0-M4/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
+Reference documentation http://spockframework.org/spock/docs/2.0/extensions.html#_writing_custom_extensions[Spock - Writing Custom Extensions]
 
 NOTE: You can use either Java or Groovy to implement the extensions.
       Spock itself uses Java as this provides compatibility with the different Groovy versions.
@@ -80,10 +80,10 @@ Apply the `@LogThread` extension to the tests `a`, `b`, `c` in `ExampleTest` and
 
 === Step 3
 As you have noticed the method `visitFeatureAnnotation` is called before the actual execution of the features and even the specification.
-To do something when the actual feature is executed you have to register an http://spockframework.org/spock/docs/2.0-M4/extensions.html#_interceptors[interceptor] at the appropriate location.
+To do something when the actual feature is executed you have to register an http://spockframework.org/spock/docs/2.0/extensions.html#_interceptors[interceptor] at the appropriate location.
 
 .Spock Interceptors
-image:http://spockframework.org/spock/docs/2.0-M4/images/spock_interceptors.png[]
+image:http://spockframework.org/spock/docs/2.0/images/spock_interceptors.png[]
 
 As you can see Spock offers a lot of hooks to hook into. Try to figure out which interception point you want to hook into.
 Remember, we want to log the current thread for every feature that is executed.
@@ -457,7 +457,7 @@ public void visitSpec(SpecInfo spec) {
 ====
 
 === Step 6
-While a system property certainly works, a more powerful way is to use http://spockframework.org/spock/docs/2.0-M4/extensions.html#_configuration_objects[Configuration Objects].
+While a system property certainly works, a more powerful way is to use http://spockframework.org/spock/docs/2.0/extensions.html#_configuration_objects[Configuration Objects].
 
 Define a simple configuration object with the field `enabled` that is available under the section `executionLog` and `true` by default.
 

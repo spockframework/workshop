@@ -42,7 +42,7 @@ runner {
 }
 ----
 
-see also http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#parallel-thread-pool[Parallel Thread Pool].
+see also http://spockframework.org/spock/docs/2.0/parallel_execution.html#parallel-thread-pool[Parallel Thread Pool].
 
 Run all tests 2x and compare the generated execution records.
 
@@ -57,10 +57,10 @@ NOTE: Sometimes IntelliJ does not correctly copy the resources,
 == Step 3
 Look at the tools Spock gives you to deal with tests that use a shared resource.
 
-* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#execution-modes[Execution modes]
-* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_resource_locks[Resource Locks]
-* http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_isolated_execution[Isolated Execution]
-* Some http://spockframework.org/spock/docs/2.0-M4/extensions.html[Extension] also affect parallel execution, you can find that info in the notes
+* http://spockframework.org/spock/docs/2.0/parallel_execution.html#execution-modes[Execution modes]
+* http://spockframework.org/spock/docs/2.0/parallel_execution.html#_resource_locks[Resource Locks]
+* http://spockframework.org/spock/docs/2.0/parallel_execution.html#_isolated_execution[Isolated Execution]
+* Some http://spockframework.org/spock/docs/2.0/extensions.html[Extension] also affect parallel execution, you can find that info in the notes
 
 == Step 4
 
@@ -99,4 +99,4 @@ NOTE: Both Spock and JUnit Jupiter have an `@Execution` extension,
 
 Optimize the amount of concurrency. The easiest solution would be to just disable parallel execution altogether or use `@Isolated` for every specification,
 but that defeats the purpose. Try to use read-locks as much as possible and only use write locks where you actually mutate shared state.
-Also keep the http://spockframework.org/spock/docs/2.0-M4/parallel_execution.html#_lock_coarsening[lock coarsening] behavior in mind when applying locks.
+Also keep the http://spockframework.org/spock/docs/2.0/parallel_execution.html#_lock_coarsening[lock coarsening] behavior in mind when applying locks.
